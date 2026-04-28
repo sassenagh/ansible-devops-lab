@@ -1,4 +1,5 @@
-- hosts: local
+- name: Deploy web application
+  hosts: local
   vars:
     app_env: dev
   roles:

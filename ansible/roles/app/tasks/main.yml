@@ -1,9 +1,11 @@
 - name: Create app directory
-  file:
+  ansible.builtin.file:
     path: /ansible/app
     state: directory
+    mode: "0755"
 
 - name: Render HTML from template
-  template:
+  ansible.builtin.template:
     src: index.html.j2
     dest: /ansible/app/index.html
+    mode: "0644"
