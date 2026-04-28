@@ -1,0 +1,30 @@
+name: CI
+on: [ push ]
+
+jobs:
+  validate-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Ansible
+        run: sudo apt update && sudo apt install -y ansible
+
+      - name: Install community.docker collection
+        run: ansible-galaxy collection install community.docker
+
+      - name: Install Python docker SDK
+        run: pip install docker==6.1.3
+
+      - name: Syntax check
+        run: ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
+          --syntax-check
+
+      - name: Lint
+        run: pip install ansible-lint && ansible-lint ansible/
+
+      - name: Run playbook
+        run: ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
+        env:
+          HOST_APP_PATH: ${{ github.workspace }}/app
+          DOCKER_API_VERSION: "1.40"

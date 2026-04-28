@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  ansible:
+    image: willhallonline/ansible:latest
+    container_name: ansible-runner
+    working_dir: /ansible
+    volumes:
+      - .:/ansible
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOCKER_API_VERSION=1.40
+      - HOST_APP_PATH=${PWD}/app
+    command: >
+      sh -c "
+      apk add --no-cache docker-cli &&
+      ansible-galaxy collection install community.docker &&
+      pip install docker==6.1.3 --root-user-action=ignore &&
+      ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
+      "

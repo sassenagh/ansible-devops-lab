@@ -1,0 +1,9 @@
+- name: Create app directory
+  file:
+    path: /ansible/app
+    state: directory
+
+- name: Render HTML from template
+  template:
+    src: index.html.j2
+    dest: /ansible/app/index.html

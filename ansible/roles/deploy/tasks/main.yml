@@ -1,0 +1,12 @@
+- name: Debug host path
+  debug:
+    msg: "HOST_APP_PATH = {{ lookup('env', 'HOST_APP_PATH') }}"
+
+- name: Stop and remove existing webapp container
+  command: docker rm -f webapp
+  ignore_errors: true
+
+- name: Run nginx container
+  command: >
+    docker run -d --name webapp -p 8081:80 -v {{ lookup('env', 'HOST_APP_PATH')
+    }}:/usr/share/nginx/html:ro nginx:alpine

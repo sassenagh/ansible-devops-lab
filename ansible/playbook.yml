@@ -1,0 +1,6 @@
+- hosts: local
+  vars:
+    app_env: dev
+  roles:
+    - app
+    - deploy
