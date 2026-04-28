@@ -1,11 +1,11 @@
 - name: Create app directory
   ansible.builtin.file:
-    path: /ansible/app
+    path: "{{ lookup('env', 'HOST_APP_PATH') }}"
     state: directory
     mode: "0755"
 
 - name: Render HTML from template
   ansible.builtin.template:
     src: index.html.j2
-    dest: /ansible/app/index.html
+    dest: "{{ lookup('env', 'HOST_APP_PATH') }}/index.html"
     mode: "0644"
