@@ -1,11 +1,12 @@
 # Ansible DevOps Lab
 ![Ansible](https://img.shields.io/badge/ansible-automation-red)
 ![Docker](https://img.shields.io/badge/docker-containerized-blue)
-![GitHub Actions](https://img.shields.io/badge/github_actions-CI-black)
+![Jinja2](https://img.shields.io/badge/jinja2-templating-orange)
 ![Nginx](https://img.shields.io/badge/nginx-web--server-green)
-![License](https://img.shields.io/badge/license-MIT-green)
+![License](https://img.shields.io/badge/license-MIT-purple)
 
 A local and CI-ready Ansible lab that provisions and deploys a containerized nginx web application.  
+
 This project demonstrates a DevOps workflow including Ansible roles, Jinja2 templating, Docker deployment, and automated CI with GitHub Actions.
 
 Repository:  
@@ -18,20 +19,21 @@ https://github.com/sassenagh/ansible-devops-lab
 Ansible runs inside a Docker container (locally) or directly on the GitHub Actions runner (CI). It renders an HTML template and deploys it via an nginx container.
 
 ```
-   Push to GitHub
-         │
-         ▼
-  GitHub Actions Runner
-         │
-         ▼
-   Ansible Playbook
-  ┌──────────────────┐
-  │  Role: app       │  → Creates directory + renders HTML template
-  │  Role: deploy    │  → Runs nginx Docker container
-  └──────────────────┘
-         │
-         ▼
-   nginx container
+     Push to GitHub
+           │
+           ▼
+   GitHub Actions Runner
+           │
+           ▼
+    Ansible Playbook
+  ┌──────────────────────────────┐
+  │  Role: app                   │  → Creates directory + renders HTML
+  │  Role: deploy                │  → Runs nginx Docker container
+  │  Role: docker (remote only)  │  → Installs Docker on target host
+  └──────────────────────────────┘
+           │
+           ▼
+   nginx:alpine container
    http://localhost:8081
 ```
 
@@ -134,11 +136,13 @@ Docker Desktop requires host paths for volume mounts. Since Ansible runs inside 
 
 Triggered on every push. Steps run in order:
 
-1. Install Ansible and `community.docker` collection
-2. Install Python Docker SDK
-3. Syntax check the playbook
-4. Run `ansible-lint` at `production` profile
-5. Execute the full playbook
+- Checkout the repository
+- Install Ansible via `apt`
+- Install `community.docker` collection
+- Install Python Docker SDK (`docker==6.1.3`)
+- Syntax check with `--syntax-check`
+- Lint with `ansible-lint` — passes at `production` profile
+- Run the full playbook with `HOST_APP_PATH` and `DOCKER_API_VERSION`
 
 Example workflow trigger:
 
