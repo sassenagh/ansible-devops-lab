@@ -9,6 +9,6 @@
 
 - name: Run nginx container
   ansible.builtin.command: >
-    docker run -d --name webapp -p 8081:80 -v {{ lookup('env', 'HOST_APP_PATH')
-    }}:/usr/share/nginx/html:ro nginx:alpine
+    docker run -d --name webapp -p {{ app_port }}:80 -v {{ lookup('env',
+    'HOST_APP_PATH') }}:/usr/share/nginx/html:ro nginx:alpine
   changed_when: true

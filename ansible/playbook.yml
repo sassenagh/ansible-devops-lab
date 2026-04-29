@@ -1,5 +1,5 @@
 - name: Deploy web application
-  hosts: dev
+  hosts: all
   roles:
     - app
     - deploy
