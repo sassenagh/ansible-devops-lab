@@ -1,7 +1,5 @@
 - name: Deploy web application
-  hosts: local
-  vars:
-    app_env: dev
+  hosts: dev
   roles:
     - app
     - deploy
